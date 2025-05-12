@@ -3,7 +3,7 @@ Contributors: catchplugins, catchthemes, sakinshrestha, pratikshrestha, maheshma
 Donate link: https://catchplugins.com/plugins/catch-ids/
 Tags: catch-ids, simple, admin, wp-admin, show, ids, post, page, category, media, links, tag, user, id, post id, page id, category id, tag id, media id
 Requires at least: 5.9
-Tested up to: 6.5
+Tested up to: 6.8
 Stable tag: trunk
 License: GNU General Public License, version 3 (GPLv3)
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -50,6 +50,9 @@ Not so easy way (via FTP) :
 
 
 == Changelog ==
+
+= 2.7.2 (Released: May 12, 2024) =
+* Compatibility check up to version 6.8
 
 = 2.7.1 (Released: April 16, 2024) =
 * Bug Fixed: Deprecation notice in PHP 8.2
