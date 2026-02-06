@@ -3,10 +3,10 @@ Contributors: catchplugins, catchthemes, sakinshrestha, pratikshrestha, maheshma
 Donate link: https://catchplugins.com/plugins/catch-ids/
 Tags: catch-ids, simple, admin, wp-admin, show, ids, post, page, category, media, links, tag, user, id, post id, page id, category id, tag id, media id
 Requires at least: 5.9
-Tested up to: 6.8
-Stable tag: trunk
-License: GNU General Public License, version 3 (GPLv3)
-License URI: http://www.gnu.org/licenses/gpl-3.0.txt
+Tested up to: 6.9
+Stable tag: 2.8
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 What this plugin does is to shows the IDs on admin section.
 
@@ -51,7 +51,21 @@ Not so easy way (via FTP) :
 
 == Changelog ==
 
-= 2.7.2 (Released: May 12, 2024) =
+= 2.8 (Released: February 02, 2026) =
+* Bug Fixed: WordPress.WP.I18n.TextDomainMismatch
+* Bug Fixed: WordPress.Security.NonceVerification.Recommended
+* Bug Fixed: WordPress.WP.I18n.MissingTranslatorsComment
+* Bug Fixed: WordPress.WP.I18n.MissingArgDomain
+* Bug Fixed: plugin_header_invalid_author_uri
+* Bug Fixed: WordPress.Security.EscapeOutput.OutputNotEscaped
+* Bug Fixed: license_mismatch in readme
+* Bug Fixed: invalid_license in readme
+* Bug Fixed: WordPress.WP.I18n.NonSingularStringLiteralText
+
+= 2.7.3 (Released: January 07, 2026) =
+* Compatibility check up to version 6.9
+
+= 2.7.2 (Released: May 12, 2025) =
 * Compatibility check up to version 6.8
 
 = 2.7.1 (Released: April 16, 2024) =
