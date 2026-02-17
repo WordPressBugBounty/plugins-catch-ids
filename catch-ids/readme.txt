@@ -4,7 +4,7 @@ Donate link: https://catchplugins.com/plugins/catch-ids/
 Tags: catch-ids, simple, admin, wp-admin, show, ids, post, page, category, media, links, tag, user, id, post id, page id, category id, tag id, media id
 Requires at least: 5.9
 Tested up to: 6.9
-Stable tag: 2.8
+Stable tag: 2.8.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,6 +50,9 @@ Not so easy way (via FTP) :
 
 
 == Changelog ==
+
+= 2.8.1 (Released: February 17, 2026) =
+* Bug Fixed: Fixed error occurred while adding new themes.
 
 = 2.8 (Released: February 02, 2026) =
 * Bug Fixed: WordPress.WP.I18n.TextDomainMismatch

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Catch Ids\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/tags/catch-ids\n"
-"POT-Creation-Date: 2026-02-02 21:17+0545\n"
+"POT-Creation-Date: 2026-02-17 20:56+0545\n"
 "PO-Revision-Date: 2016-12-07 22:52-0500\n"
 "Last-Translator: Pratik Shrestha <pratik@catchplugins.com>\n"
 "Language-Team: Catch Plugins <info@catchplugins.com>\n"
@@ -48,16 +48,16 @@ msgstr ""
 msgid "Permission denied!"
 msgstr ""
 
-#: ../includes/CatchThemesThemePlugin.php:177
+#: ../includes/CatchThemesThemePlugin.php:161
 msgid "Themes by CatchThemes"
 msgstr ""
 
-#: ../includes/CatchThemesThemePlugin.php:459
+#: ../includes/CatchThemesThemePlugin.php:443
 msgctxt "Plugin Installer"
 msgid "Catch Plugins"
 msgstr ""
 
-#: ../includes/CatchThemesThemePlugin.php:503
+#: ../includes/CatchThemesThemePlugin.php:487
 #, php-format
 msgid ""
 "You can use any of our free plugins or premium plugins from <a "

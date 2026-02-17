@@ -38,28 +38,12 @@ class CatchThemesThemePlugin
 	{
 		global $themes_allowedtags, $theme_field_defaults;
 
-		// Capability check
 		if (! current_user_can('install_themes')) {
 			wp_send_json_error();
 		}
 
-		// Nonce verification
-		check_ajax_referer('ci_query_themes_nonce', 'nonce');
-
-		// Copy superglobal ONCE
-		$post_data = wp_unslash($_POST);
-
-		// Now sanitize
-		$post_data = map_deep($post_data, 'sanitize_text_field');
-
-		// From this point on, DO NOT use $_POST again
-		if (empty($post_data['request']) || ! is_array($post_data['request'])) {
-			wp_send_json_error();
-		}
-
-
 		$args = wp_parse_args(
-			$post_data['request'],
+			wp_unslash($_REQUEST['request']),
 			array(
 				'per_page' => 20,
 				'fields'   => array_merge(
