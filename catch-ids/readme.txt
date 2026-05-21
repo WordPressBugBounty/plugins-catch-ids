@@ -3,8 +3,9 @@ Contributors: catchplugins, catchthemes, sakinshrestha, pratikshrestha, maheshma
 Donate link: https://catchplugins.com/plugins/catch-ids/
 Tags: catch-ids, simple, admin, wp-admin, show, ids, post, page, category, media, links, tag, user, id, post id, page id, category id, tag id, media id
 Requires at least: 5.9
-Tested up to: 6.9
-Stable tag: 2.8.1
+Requires PHP: 7.4
+Tested up to: 7.0
+Stable tag: 3.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,6 +51,27 @@ Not so easy way (via FTP) :
 
 
 == Changelog ==
+
+= 3.0 (Released: May 21, 2026) =
+* Bug Fixed: Settings page capability changed from 'edit_posts' to 'manage_options' — only administrators should be able to modify global plugin settings
+* Bug Fixed: Added missing catchids_sanitize_callback() — was registered in register_setting() but never defined
+* Bug Fixed: catchids_get_options() called with phantom argument 'catchids_options' in both AJAX handlers — argument removed
+* Bug Fixed: Unescaped echo in class attributes — wrapped all $options[...] ternary outputs with esc_attr() in partials
+* Bug Fixed: Raw HTML in plugin meta links — wrapped with wp_kses() with explicit allowed tags list; deduplicated SVG with str_repeat()
+* Bug Fixed: __('ID') changed to esc_html__('ID') for column header output
+* Bug Fixed: esc_html($value, 'catch-ids') — esc_html() does not accept a text domain; second argument removed
+* Bug Fixed: Dead version_compare() checks against WP 3.0.999 removed — plugin requires WP 5.9+
+* Bug Fixed: null == $option loose comparison changed to null === $option
+* Bug Fixed: Hardcoded '1.0' version strings in asset enqueues replaced with CATCH_IDS_VERSION; scripts moved to footer
+* Bug Fixed: 'Features' tab label hardcoded in English — wrapped with esc_html_e()
+* Bug Fixed: add_action() calls moved to after function definitions for catchids_switch and ctp_switch
+* Bug Fixed: Debug comment //print_r($options); die(); removed
+* Bug Fixed: Global-scope option loading and CatchThemesThemePlugin require moved into plugins_loaded hook
+* Bug Fixed: catchids_add_plugin_meta_links() missing if (!function_exists()) guard — added
+* Bug Fixed: $id appended without absint() in catchids_return_value() — wrapped with absint()
+* Bug Fixed: Unnecessary PHP echo for static string IDs in display-dashboard.php — replaced with plain HTML
+* Improvement: Duplicate catchids_switch() and ctp_switch() AJAX handlers refactored into shared catchids_handle_ajax_switch() helper
+* Compatibility check up to version 7.0
 
 = 2.8.1 (Released: February 17, 2026) =
 * Bug Fixed: Fixed error occurred while adding new themes.

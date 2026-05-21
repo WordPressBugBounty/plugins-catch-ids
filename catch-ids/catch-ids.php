@@ -16,7 +16,7 @@
  * Plugin Name:       Catch IDs
  * Plugin URI:        https://catchplugins.com/plugins/catch-ids/
  * Description:       Catch IDs is a simple and light weight plugin to show the Post ID, Page ID, Media ID, Links ID, Category ID, Tag ID and User ID in the Admin Section Table. This plugin was initially develop to support our themes features slider. Then we thought that this will be helpful to all the WordPress Admin Users. Just activate and catch IDs in your page, post, category, tag and media pages.
- * Version:           2.8.1
+ * Version:           3.0
  * Author:            Catch Plugins
  * Author URI:        https://catchplugins.com
  * License:           GPL-3.0+
@@ -54,7 +54,7 @@ if (! defined('ABSPATH')) {
 
 // Define Version
 if (! defined('CATCH_IDS_VERSION')) {
-	define('CATCH_IDS_VERSION', '2.8.1');
+	define('CATCH_IDS_VERSION', '3.0');
 }
 
 // The URL of the directory that contains the plugin
@@ -93,7 +93,7 @@ if (! function_exists('catchids_column')) :
 	 */
 	function catchids_column($cols)
 	{
-		$column_id = array('catchids' => __('ID', 'catch-ids'));
+		$column_id = array('catchids' => esc_html__('ID', 'catch-ids'));
 		$cols      = array_slice($cols, 0, 1, true) + $column_id + array_slice($cols, 1, null, true);
 		return $cols;
 	}
@@ -117,7 +117,7 @@ if (! function_exists('catchids_return_value')) :
 	function catchids_return_value($value, $column_name, $id)
 	{
 		if ('catchids' == $column_name) {
-			$value .= $id;
+			$value .= absint($id);
 		}
 		return $value;
 	}
@@ -180,9 +180,7 @@ if (! function_exists('catchids_add')) :
 			if (is_array($options) && array_key_exists('category', $options) && (1 == $options['category'])) {
 				add_action("manage_edit-{$taxonomy}_columns", 'catchids_column');
 				add_filter("manage_{$taxonomy}_custom_column", 'catchids_return_value', 10, 3);
-				if (version_compare($GLOBALS['wp_version'], '3.0.999', '>')) {
-					add_filter("manage_edit-{$taxonomy}_sortable_columns", 'catchids_column');
-				}
+				add_filter("manage_edit-{$taxonomy}_sortable_columns", 'catchids_column');
 			}
 		}
 
@@ -190,9 +188,7 @@ if (! function_exists('catchids_add')) :
 			if (is_array($options) && array_key_exists($ptype, $options) && (1 == $options[$ptype])) {
 				add_action("manage_edit-{$ptype}_columns", 'catchids_column');
 				add_filter("manage_{$ptype}_posts_custom_column", 'catchids_value', 10, 3);
-				if (version_compare($GLOBALS['wp_version'], '3.0.999', '>')) {
-					add_filter("manage_edit-{$ptype}_sortable_columns", 'catchids_column');
-				}
+				add_filter("manage_edit-{$ptype}_sortable_columns", 'catchids_column');
 			}
 		}
 
@@ -200,18 +196,14 @@ if (! function_exists('catchids_add')) :
 		if (is_array($options) && array_key_exists('user', $options) && (1 == $options['user'])) {
 			add_action('manage_users_columns', 'catchids_column');
 			add_filter('manage_users_custom_column', 'catchids_return_value', 10, 3);
-			if (version_compare($GLOBALS['wp_version'], '3.0.999', '>')) {
-				add_filter('manage_users_sortable_columns', 'catchids_column');
-			}
+			add_filter('manage_users_sortable_columns', 'catchids_column');
 		}
 
 		// For Comment Management
 		if (is_array($options) && array_key_exists('comment', $options) && (1 == $options['comment'])) {
 			add_action('manage_edit-comments_columns', 'catchids_column');
 			add_action('manage_comments_custom_column', 'catchids_value', 10, 2);
-			if (version_compare($GLOBALS['wp_version'], '3.0.999', '>')) {
-				add_filter('manage_edit-comments_sortable_columns', 'catchids_column');
-			}
+			add_filter('manage_edit-comments_sortable_columns', 'catchids_column');
 		}
 	}
 endif; // catchids_add
@@ -265,7 +257,7 @@ if (! function_exists('catchids_default_options')) :
 		$default_options['comment']           = 1;
 		$default_options['theme_plugin_tabs'] = 1;
 
-		if (null == $option) {
+		if (null === $option) {
 			return apply_filters('catchids_options', $default_options);
 		} else {
 			return $default_options[$option];
@@ -280,7 +272,7 @@ if (! function_exists('catchids_add_plugin_settings_menu')) :
 		add_menu_page(
 			esc_html__('Catch IDs', 'catch-ids'), //page title
 			esc_html__('Catch IDs', 'catch-ids'), //menu title
-			'edit_posts', //capability needed
+			'manage_options', //capability needed
 			'catch-ids', //menu slug (and page query url)
 			'catchids_settings',
 			'dashicons-editor-ol',
@@ -295,7 +287,7 @@ if (! function_exists('catchids_settings')) :
 	function catchids_settings()
 	{
 		$child_theme = false;
-		if (! current_user_can('edit_posts')) {
+		if (! current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'catch-ids'));
 		}
 
@@ -303,6 +295,26 @@ if (! function_exists('catchids_settings')) :
 	}
 endif; // catchids_settings
 
+
+if (! function_exists('catchids_sanitize_callback')) :
+	/**
+	 * Sanitize callback for catchids_options.
+	 *
+	 * @param array $input Raw input array.
+	 * @return array Sanitized options.
+	 */
+	function catchids_sanitize_callback($input)
+	{
+		$defaults = catchids_default_options();
+		$output   = array();
+
+		foreach ($defaults as $key => $default) {
+			$output[$key] = isset($input[$key]) ? (int) $input[$key] : 0;
+		}
+
+		return $output;
+	}
+endif; // catchids_sanitize_callback
 
 if (! function_exists('catchids_register_settings')) :
 	/**
@@ -349,8 +361,8 @@ if (! function_exists('catchids_enqueue_styles')) :
 
 		if ('toplevel_page_catch-ids' === $hook_suffix) {
 
-			wp_enqueue_style('catchids-styles', plugin_dir_url(__FILE__) . 'css/catch-ids.css', array(), '1.0', 'all');
-			wp_enqueue_style('catch-ids-dashboard-tabs', plugin_dir_url(__FILE__) . 'css/admin-dashboard.css', array(), '1.0', 'all');
+			wp_enqueue_style('catchids-styles', plugin_dir_url(__FILE__) . 'css/catch-ids.css', array(), CATCH_IDS_VERSION, 'all');
+			wp_enqueue_style('catch-ids-dashboard-tabs', plugin_dir_url(__FILE__) . 'css/admin-dashboard.css', array(), CATCH_IDS_VERSION, 'all');
 		}
 	}
 endif; // catchids_enqueue_styles
@@ -362,135 +374,141 @@ if (! function_exists('catchids_enqueue_scripts')) :
 	{
 		if ('toplevel_page_catch-ids' === $hook_suffix) {
 
-			wp_enqueue_script('catch-ids-match-height', plugin_dir_url(__FILE__) . 'js/jquery.matchHeight.min.js', array('jquery'), '1.0', false);
-			wp_enqueue_script('catchids-scripts', plugin_dir_url(__FILE__) . 'js/catch-ids.js', array('jquery', 'catch-ids-match-height'), '1.0', false);
+			wp_enqueue_script('catch-ids-match-height', plugin_dir_url(__FILE__) . 'js/jquery.matchHeight.min.js', array('jquery'), CATCH_IDS_VERSION, true);
+			wp_enqueue_script('catchids-scripts', plugin_dir_url(__FILE__) . 'js/catch-ids.js', array('jquery', 'catch-ids-match-height'), CATCH_IDS_VERSION, true);
 		}
 	}
 endif; // catchids_enqueue_scripts
 add_action('admin_enqueue_scripts', 'catchids_enqueue_scripts');
 
 
-add_action('wp_ajax_catchids_switch', 'catchids_switch');
+if (! function_exists('catchids_handle_ajax_switch')) :
+	/**
+	 * Shared handler for toggle-switch AJAX requests.
+	 *
+	 * @param string $nonce_action The nonce action string to verify against.
+	 */
+	function catchids_handle_ajax_switch($nonce_action)
+	{
+		if (! isset($_POST['security'], $_POST['value'], $_POST['option_name'])) {
+			wp_die(esc_html__('Invalid request.', 'catch-ids'));
+		}
+
+		// Verify nonce.
+		$nonce = sanitize_text_field(wp_unslash($_POST['security']));
+		if (! wp_verify_nonce($nonce, $nonce_action)) {
+			wp_die(esc_html__('Unauthorized access!', 'catch-ids'));
+		}
+
+		// Capability check.
+		if (! current_user_can('manage_options')) {
+			wp_die(esc_html__('Permission denied!', 'catch-ids'));
+		}
+
+		// Sanitize inputs.
+		$raw_value   = sanitize_text_field(wp_unslash($_POST['value']));
+		$value       = ('true' === $raw_value) ? 1 : 0;
+		$option_name = sanitize_key(wp_unslash($_POST['option_name']));
+
+		// Update option.
+		$option_value               = catchids_get_options();
+		$option_value[$option_name] = $value;
+
+		if (update_option('catchids_options', $option_value)) {
+			echo esc_html($value);
+		} else {
+			esc_html_e('Connection Error. Please try again.', 'catch-ids');
+		}
+
+		wp_die();
+	}
+endif; // catchids_handle_ajax_switch
 
 if (! function_exists('catchids_switch')) :
 	function catchids_switch()
 	{
-
-		if (! isset($_POST['security'], $_POST['value'], $_POST['option_name'])) {
-			wp_die(esc_html__('Invalid request.', 'catch-ids'));
-		}
-
-		// Sanitize & verify nonce
-		$nonce = sanitize_text_field(wp_unslash($_POST['security']));
-		if (! wp_verify_nonce($nonce, 'catch_ids_nonce')) {
-			wp_die(esc_html__('Unauthorized access!', 'catch-ids'));
-		}
-
-		// Capability check
-		if (! current_user_can('manage_options')) {
-			wp_die(esc_html__('Permission denied!', 'catch-ids'));
-		}
-
-		// Sanitize remaining inputs
-		$raw_value = sanitize_text_field(wp_unslash($_POST['value']));
-		$value     = ('true' === $raw_value) ? 1 : 0;
-
-		$option_name = sanitize_key(wp_unslash($_POST['option_name']));
-
-		// Update option safely
-
-		$option_value = catchids_get_options('catchids_options');
-
-		$option_value[$option_name] = $value;
-
-		if (update_option('catchids_options', $option_value)) {
-			echo esc_html($value);
-		} else {
-			esc_html_e('Connection Error. Please try again.', 'catch-ids');
-		}
-		wp_die(); // this is required to terminate immediately and return a proper response
+		catchids_handle_ajax_switch('catch_ids_nonce');
 	}
 endif; // catchids_switch
-
-add_action('wp_ajax_ctp_switch', 'ctp_switch');
+add_action('wp_ajax_catchids_switch', 'catchids_switch');
 
 if (! function_exists('ctp_switch')) :
 	function ctp_switch()
 	{
-
-		if (! isset($_POST['security'], $_POST['value'], $_POST['option_name'])) {
-			wp_die(esc_html__('Invalid request.', 'catch-ids'));
-		}
-
-		// Sanitize & verify nonce
-		$nonce = sanitize_text_field(wp_unslash($_POST['security']));
-		if (! wp_verify_nonce($nonce, 'catch_ids_tabs_nonce')) {
-			wp_die(esc_html__('Unauthorized access!', 'catch-ids'));
-		}
-
-		// Capability check
-		if (! current_user_can('manage_options')) {
-			wp_die(esc_html__('Permission denied!', 'catch-ids'));
-		}
-
-		// Sanitize remaining inputs
-		$raw_value = sanitize_text_field(wp_unslash($_POST['value']));
-		$value     = ('true' === $raw_value) ? 1 : 0;
-
-		$option_name = sanitize_key(wp_unslash($_POST['option_name']));
-
-		// Update option safely
-
-		$option_value = catchids_get_options('catchids_options');
-
-		///
-
-		$option_value[$option_name] = $value;
-
-		if (update_option('catchids_options', $option_value)) {
-			echo esc_html($value);
-		} else {
-			esc_html_e('Connection Error. Please try again.', 'catch-ids');
-		}
-		wp_die(); // this is required to terminate immediately and return a proper response
+		catchids_handle_ajax_switch('catch_ids_tabs_nonce');
 	}
-endif; // catchids_switch
+endif; // ctp_switch
+add_action('wp_ajax_ctp_switch', 'ctp_switch');
 
-$options = catchids_get_options();
-//print_r($options); die();
-if (1 == $options['theme_plugin_tabs']) {
-	/* Adds Catch Themes tab in Add theme page and Themes by Catch Themes in Customizer's change theme option. */
-	if (! class_exists('CatchThemesThemePlugin') && ! function_exists('add_our_plugins_tab')) {
-		require plugin_dir_path(__FILE__) . 'includes/CatchThemesThemePlugin.php';
+add_action('plugins_loaded', 'catchids_load_theme_plugin_tabs');
+
+if (! function_exists('catchids_load_theme_plugin_tabs')) :
+	function catchids_load_theme_plugin_tabs()
+	{
+		$options = catchids_get_options();
+		if (1 == $options['theme_plugin_tabs']) {
+			/* Adds Catch Themes tab in Add theme page and Themes by Catch Themes in Customizer's change theme option. */
+			if (! class_exists('CatchThemesThemePlugin') && ! function_exists('add_our_plugins_tab')) {
+				require plugin_dir_path(__FILE__) . 'includes/CatchThemesThemePlugin.php';
+			}
+		}
 	}
-}
+endif; // catchids_load_theme_plugin_tabs
 
 /* Adds support link and review link in plugin page */
-// Only visible if the plugin is active
 add_filter('plugin_row_meta', 'catchids_add_plugin_meta_links', 10, 2);
-function catchids_add_plugin_meta_links($meta_fields, $file)
-{
-	if ($file == plugin_basename(__FILE__)) {
 
-		$meta_fields[] = "<a href='https://catchplugins.com/support-forum/forum/catch-ids/' target='_blank'>Support Forum</a>";
-		$meta_fields[] = "<a href='https://wordpress.org/support/plugin/catch-ids/reviews#new-post' target='_blank' title='Rate'>
-		        <i class='ct-rate-stars'>"
-			. "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
-			. "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
-			. "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
-			. "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
-			. "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
-			. '</i></a>';
+if (! function_exists('catchids_add_plugin_meta_links')) :
+	function catchids_add_plugin_meta_links($meta_fields, $file)
+	{
+		if ($file === plugin_basename(__FILE__)) {
 
-		$stars_color = '#ffb900';
+			$allowed_html = array(
+				'a'       => array(
+					'href'   => array(),
+					'target' => array(),
+					'title'  => array(),
+				),
+				'i'       => array('class' => array()),
+				'svg'     => array(
+					'xmlns'           => array(),
+					'width'           => array(),
+					'height'          => array(),
+					'viewbox'         => array(),
+					'fill'            => array(),
+					'stroke'          => array(),
+					'stroke-width'    => array(),
+					'stroke-linecap'  => array(),
+					'stroke-linejoin' => array(),
+					'class'           => array(),
+				),
+				'polygon' => array('points' => array()),
+			);
 
-		echo '<style>'
-			. '.ct-rate-stars{display:inline-block;color:' . esc_attr($stars_color) . ';position:relative;top:3px;}'
-			. '.ct-rate-stars svg{fill:' . esc_attr($stars_color) . ';}'
-			. '.ct-rate-stars svg:hover{fill:' . esc_attr($stars_color) . '}'
-			. '.ct-rate-stars svg:hover ~ svg{fill:none;}'
-			. '</style>';
+			$star_svg = "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>";
+
+			$meta_fields[] = wp_kses(
+				"<a href='https://catchplugins.com/support-forum/forum/catch-ids/' target='_blank'>Support Forum</a>",
+				$allowed_html
+			);
+			$meta_fields[] = wp_kses(
+				"<a href='https://wordpress.org/support/plugin/catch-ids/reviews#new-post' target='_blank' title='Rate'>"
+				. "<i class='ct-rate-stars'>"
+				. str_repeat($star_svg, 5)
+				. '</i></a>',
+				$allowed_html
+			);
+
+			$stars_color = '#ffb900';
+
+			echo '<style>'
+				. '.ct-rate-stars{display:inline-block;color:' . esc_attr($stars_color) . ';position:relative;top:3px;}'
+				. '.ct-rate-stars svg{fill:' . esc_attr($stars_color) . ';}'
+				. '.ct-rate-stars svg:hover{fill:' . esc_attr($stars_color) . '}'
+				. '.ct-rate-stars svg:hover ~ svg{fill:none;}'
+				. '</style>';
+		}
+
+		return $meta_fields;
 	}
-
-	return $meta_fields;
-}
+endif; // catchids_add_plugin_meta_links

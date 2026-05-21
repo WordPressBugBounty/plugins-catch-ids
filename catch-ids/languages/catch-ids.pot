@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Catch Ids\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/tags/catch-ids\n"
-"POT-Creation-Date: 2026-02-17 20:56+0545\n"
+"POT-Creation-Date: 2026-05-21 10:37+0545\n"
 "PO-Revision-Date: 2016-12-07 22:52-0500\n"
 "Last-Translator: Pratik Shrestha <pratik@catchplugins.com>\n"
 "Language-Team: Catch Plugins <info@catchplugins.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-Poedit-KeywordsList: "
 "__;_e;_n:1,2;_x:1,2c;esc_attr_e;esc_attr__;_nx;esc_html__\n"
 "X-Poedit-Basepath: .\n"
@@ -24,27 +24,27 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: ../catch-ids.php:281 ../catch-ids.php:282
+#: ../catch-ids.php:273 ../catch-ids.php:274
 msgid "Catch IDs"
 msgstr ""
 
-#: ../catch-ids.php:299
+#: ../catch-ids.php:291
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: ../catch-ids.php:336
+#: ../catch-ids.php:348
 msgid "Settings"
 msgstr ""
 
-#: ../catch-ids.php:380 ../catch-ids.php:422
+#: ../catch-ids.php:394
 msgid "Invalid request."
 msgstr ""
 
-#: ../catch-ids.php:386 ../catch-ids.php:428
+#: ../catch-ids.php:400
 msgid "Unauthorized access!"
 msgstr ""
 
-#: ../catch-ids.php:391 ../catch-ids.php:433
+#: ../catch-ids.php:405
 msgid "Permission denied!"
 msgstr ""
 

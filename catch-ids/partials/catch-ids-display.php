@@ -27,7 +27,7 @@ if (! defined('ABSPATH')) exit;
 
             <h2 class="nav-tab-wrapper">
                 <a class="nav-tab nav-tab-active" id="dashboard-tab" href="#dashboard"><?php esc_html_e('Dashboard', 'catch-ids'); ?></a>
-                <a class="nav-tab" id="features-tab" href="#features">Features</a>
+                <a class="nav-tab" id="features-tab" href="#features"><?php esc_html_e('Features', 'catch-ids'); ?></a>
             </h2>
 
             <div id="dashboard" class="wpcatchtab  nosave active">
@@ -49,7 +49,7 @@ if (! defined('ABSPATH')) exit;
                                     <?php echo esc_html__('Turn On Catch Themes & Catch Plugin tabs', 'catch-ids');  ?>
                                 </td>
                                 <td>
-                                    <div class="module-header <?php echo $options['theme_plugin_tabs'] ? 'active' : 'inactive'; ?>">
+                                    <div class="module-header <?php echo esc_attr($options['theme_plugin_tabs'] ? 'active' : 'inactive'); ?>">
                                         <div class="switch">
                                             <input type="hidden" name="catch_ids_tabs_nonce" id="catch_ids_tabs_nonce" value="<?php echo esc_attr(wp_create_nonce('catch_ids_tabs_nonce')); ?>" />
                                             <input type="checkbox" id="catchids_options[theme_plugin_tabs]" class="ctp-switch" rel="theme_plugin_tabs" <?php checked(true, $options['theme_plugin_tabs']); ?>>

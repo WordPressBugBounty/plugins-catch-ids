@@ -30,8 +30,8 @@ if (! defined('ABSPATH')) exit;
 				?>
 					<!-- Custom Post Types -->
 					<div id="module-<?php echo esc_attr($key); ?>" class="catch-modules">
-						<div class="module-header <?php echo $options[$key] ? 'active' : 'inactive'; ?>">
-							<h3 class="module-title"><?php echo esc_html($value, 'catch-ids'); ?></h3>
+						<div class="module-header <?php echo esc_attr($options[$key] ? 'active' : 'inactive'); ?>">
+							<h3 class="module-title"><?php echo esc_html($value); ?></h3>
 							<div class="switch">
 								<input type="hidden" name="catch_ids_nonce" id="catch_ids_nonce" value="<?php echo esc_attr(wp_create_nonce('catch_ids_nonce')); ?>" />
 								<input type="checkbox" id="catchids_options[<?php echo esc_attr($key); ?>]" class="catchids-input-switch" rel="<?php echo esc_attr($key); ?>" <?php checked(true, $options[$key]); ?>>
@@ -43,8 +43,8 @@ if (! defined('ABSPATH')) exit;
 				<?php endforeach; ?>
 
 				<!-- Media -->
-				<div id="module-<?php echo 'media'; ?>" class="catch-modules">
-					<div class="module-header <?php echo $options['media'] ? 'active' : 'inactive'; ?>">
+				<div id="module-media" class="catch-modules">
+					<div class="module-header <?php echo esc_attr($options['media'] ? 'active' : 'inactive'); ?>">
 						<h3 class="module-title"><?php esc_html_e('Media', 'catch-ids'); ?></h3>
 						<div class="switch">
 							<input type="checkbox" id="catchids_options[media]" class="catchids-input-switch" rel="media" <?php checked(true, $options['media']); ?>>
@@ -55,8 +55,8 @@ if (! defined('ABSPATH')) exit;
 				</div><!-- .catch-modules -->
 
 				<!-- Categories -->
-				<div id="module-<?php echo 'category'; ?>" class="catch-modules">
-					<div class="module-header <?php echo $options['category'] ? 'active' : 'inactive'; ?>">
+				<div id="module-category" class="catch-modules">
+					<div class="module-header <?php echo esc_attr($options['category'] ? 'active' : 'inactive'); ?>">
 						<h3 class="module-title"><?php esc_html_e('Categories', 'catch-ids'); ?></h3>
 						<div class="switch">
 							<input type="checkbox" id="catchids_options[category]" class="catchids-input-switch" rel="category" <?php checked(true, $options['category']); ?>>
@@ -67,8 +67,8 @@ if (! defined('ABSPATH')) exit;
 				</div><!-- .catch-modules -->
 
 				<!-- Users -->
-				<div id="module-<?php echo 'user'; ?>" class="catch-modules">
-					<div class="module-header <?php echo $options['user'] ? 'active' : 'inactive'; ?>">
+				<div id="module-user" class="catch-modules">
+					<div class="module-header <?php echo esc_attr($options['user'] ? 'active' : 'inactive'); ?>">
 						<h3 class="module-title"><?php esc_html_e('Users', 'catch-ids'); ?></h3>
 						<div class="switch">
 							<input type="checkbox" id="catchids_options[user]" class="catchids-input-switch" rel="user" <?php checked(true, $options['user']); ?>>
@@ -79,8 +79,8 @@ if (! defined('ABSPATH')) exit;
 				</div><!-- .catch-modules -->
 
 				<!-- Comments -->
-				<div id="module-<?php echo 'comment'; ?>" class="catch-modules">
-					<div class="module-header <?php echo $options['comment'] ? 'active' : 'inactive'; ?>">
+				<div id="module-comment" class="catch-modules">
+					<div class="module-header <?php echo esc_attr($options['comment'] ? 'active' : 'inactive'); ?>">
 						<h3 class="module-title"><?php esc_html_e('Comments', 'catch-ids'); ?></h3>
 						<div class="switch">
 							<input type="checkbox" id="catchids_options[comment]" class="catchids-input-switch" rel="comment" <?php checked(true, $options['comment']); ?>>
